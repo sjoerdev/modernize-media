@@ -1,0 +1,1 @@
+Get-ChildItem -Recurse -File | Select-Object -ExpandProperty Extension | Sort-Object -Unique
