@@ -3,12 +3,10 @@ $rootDir = "./wdmycloud_backup"
 $extensions = 
 @(
     # image formats
-    "bmp", "emf", "emz", "gif", "ico", "jpeg", "jpg", "png",
-    "orf", "raw", "svg", "tif", "tiff", "snag",
+    "bmp", "jpeg", "jpg", "png", "orf", "tif", "tiff",
 
     # video formats
-    "avi", "dvr-ms", "flv", "mkv", "mod", "moi", "mov",
-    "mp4", "mpg", "mpeg", "mswmm", "swf", "vob", "wmv", "wrf"
+    "avi", "mkv", "mod", "mov", "mp4", "mpg", "mpeg", "vob", "wmv"
 )
 
 $mediaFiles = Get-ChildItem -Path $rootDir -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $extensions -contains $_.Extension.TrimStart(".").ToLower() }
