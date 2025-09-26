@@ -1,12 +1,25 @@
-$RootPath = "./wdmycloud_backup"
+$rootDir = "./wdmycloud_backup"
 
-$Files = Get-ChildItem -Path $RootPath -Recurse -File
+$extensions = 
+@(
+    # image formats
+    "bmp", "emf", "emz", "gif", "ico", "jpeg", "jpg", "png",
+    "orf", "raw", "svg", "tif", "tiff", "snag",
 
-$FileTypeCounts = $Files | Group-Object -Property Extension | Sort-Object Count -Descending
+    # video formats
+    "avi", "dvr-ms", "flv", "mkv", "mod", "moi", "mov",
+    "mp4", "mpg", "mpeg", "mswmm", "swf", "vob", "wmv", "wrf"
+)
 
-Write-Host "File type counts in $RootPath"
-foreach ($Type in $FileTypeCounts)
+$mediaFiles = Get-ChildItem -Path $rootDir -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $extensions -contains $_.Extension.TrimStart(".").ToLower() }
+
+$groupedResults = $mediaFiles | Group-Object -Property { $_.Extension.TrimStart(".").ToLower() } | Sort-Object Count -Descending
+
+$grandTotal = $mediaFiles.Count
+Write-Host "Total of media files: $grandTotal"
+
+foreach ($group in $groupedResults)
 {
-    $Extension = if ([string]::IsNullOrWhiteSpace($Type.Name)) { "[No Extension]" } else { $Type.Name }
-    Write-Host "$Extension : $($Type.Count)"
+    $countStr = $group.name.ToString().PadLeft(10)
+    Write-Host "$countStr | $($group.count.ToString().PadRight(10))"
 }

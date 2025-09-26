@@ -1,1 +1,1 @@
-Get-ChildItem -Recurse -File | Select-Object -ExpandProperty Extension | Sort-Object -Unique
+Get-ChildItem -Recurse -File -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Extension | Sort-Object -Unique
