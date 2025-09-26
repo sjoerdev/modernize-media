@@ -18,11 +18,16 @@ if (-not (Test-Path $flatDir))
 
 Write-Host "Flattening folder: $rootDir"
 
-$files = Get-ChildItem -Path $rootDir -Recurse -File
+$files = Get-ChildItem -Path $rootDir -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $extensions -contains $_.Extension.TrimStart(".").ToLower() }
+$filesTotal = $files.Count
+$fileIndex = 0
 
 foreach ($file in $files)
 {
-    if ($extensions -notcontains $file.Extension.TrimStart(".").ToLower()) { continue }
+    $fileIndex++
+
+    $progressPercent = [math]::Round(($fileIndex / $filesTotal) * 100, 1)
+    Write-Host [$fileIndex/$filesTotal] [$progressPercent%] $file.Name
 
     $destination = Join-Path -Path $flatDir -ChildPath $file.Name
     $baseName = [System.IO.Path]::GetFileNameWithoutExtension($file.Name)
@@ -38,7 +43,7 @@ foreach ($file in $files)
     }
 
     # copy the file
-    Copy-Item -Path $file.FullName -Destination $destination
+    Copy-Item -Path $file.FullName -Destination $destination -Force -ErrorAction SilentlyContinue
 }
 
 Write-Host "Flattening complete!"
