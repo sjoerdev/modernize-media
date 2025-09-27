@@ -1,5 +1,5 @@
-$rootDir = "./wdmycloud_backup"
-$flatDir = "./wdmycloud_backup_flat"
+$rootDir = "./" + $args[0]
+$flatDir = $rootDir + "_flattened"
 
 # only copy over files of these formats to the flat directory
 $extensions = 

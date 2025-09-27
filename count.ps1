@@ -1,4 +1,4 @@
-$rootDir = "./wdmycloud_backup"
+$rootDir = "./" + $args[0]
 
 $extensions = 
 @(

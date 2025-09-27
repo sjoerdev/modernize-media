@@ -1,6 +1,6 @@
 # input and output directories
-$InputRoot = ".\wdmycloud_media_gesorteerd"
-$OutputRoot = ".\wdmycloud_media_converted"
+$InputRoot = "./" + $args[0]
+$OutputRoot = $InputRoot + "_converted"
 
 # video formats
 $VideoFormatsToConvert = @("mod", "mov", "mpg", "wmv") # ignoring the corrupted avi and vob formats
