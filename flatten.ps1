@@ -18,7 +18,7 @@ if (-not (Test-Path $flatDir))
 
 Write-Host "Flattening folder: $rootDir"
 
-$files = Get-ChildItem -Path $rootDir -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $extensions -contains $_.Extension.TrimStart(".").ToLower() }
+$files = Get-ChildItem -Path $rootDir -Recurse -File | Where-Object { $extensions -contains $_.Extension.TrimStart(".").ToLower() }
 $filesTotal = $files.Count
 $fileIndex = 0
 
@@ -43,7 +43,7 @@ foreach ($file in $files)
     }
 
     # copy the file
-    Copy-Item -Path $file.FullName -Destination $destination -Force -ErrorAction SilentlyContinue
+    Copy-Item -Path $file.FullName -Destination $destination -Force
 }
 
 Write-Host "Flattening complete!"

@@ -9,7 +9,7 @@ $extensions =
     "avi", "mkv", "mod", "mov", "mp4", "mpg", "mpeg", "vob", "wmv"
 )
 
-$mediaFiles = Get-ChildItem -Path $rootDir -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $extensions -contains $_.Extension.TrimStart(".").ToLower() }
+$mediaFiles = Get-ChildItem -Path $rootDir -Recurse -File | Where-Object { $extensions -contains $_.Extension.TrimStart(".").ToLower() }
 
 $groupedResults = $mediaFiles | Group-Object -Property { $_.Extension.TrimStart(".").ToLower() } | Sort-Object Count -Descending
 
