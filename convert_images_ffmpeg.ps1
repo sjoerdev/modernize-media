@@ -49,7 +49,7 @@ foreach ($inputFile in $AllFiles)
 
     $env:SVT_LOG = 1
     
-    ffmpeg -hide_banner -loglevel error -i "$($inputFile.FullName)" -c:v $Codec -preset $Preset -c:a copy "$($outputFile.FullName)"
+    ffmpeg -hide_banner -loglevel error -i "$($inputFile.FullName)" -c:v $Codec -preset $Preset
 }
 
 Write-Host "Finished converting media"
