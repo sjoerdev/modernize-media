@@ -1,20 +1,26 @@
 # input and output directories
 $InputRoot = "./" + $args[0]
-$OutputRoot = $InputRoot + "_av1"
+$OutputRoot = $InputRoot
 
 # video formats
 $VideoFormatsToConvert = @("mp4")
 $VideoFormatToConvertTo = "mkv"
 
+# codecs and quality
+$VideoCodecGPU = "av1_nvenc"
+$VideoCodecPresetGPU = "p3"
+$VideoCodecCPU = "libsvtav1"
+$VideoCodecPresetCPU = "5"
+
 # wether to use gpu or cpu
 $Acceleration = $false
 if ($Acceleration)
 {
-    $OutputRoot += "_gpu"
+    $OutputRoot += "_" + $VideoCodecGPU
 }
 else
 {
-    $OutputRoot += "_cpu"
+    $OutputRoot += "_" + $VideoCodecCPU
 }
 
 # recursively find all media files
@@ -37,7 +43,6 @@ foreach ($inputFile in $AllFiles)
     $absInputRoot = (Resolve-Path $InputRoot).Path
     $absFile = (Resolve-Path $inputFile.FullName).Path
     $relativePath = $absFile.Substring($absInputRoot.Length).TrimStart('\')
-
     $outputFile = [System.IO.FileInfo]$(Join-Path -Path $OutputRoot -ChildPath ([System.IO.Path]::ChangeExtension($relativePath, ("." + $VideoFormatToConvertTo))))
 
     # make sure output path exists
@@ -54,16 +59,18 @@ foreach ($inputFile in $AllFiles)
         continue
     }
 
-    Write-Host "[$Counter/$TotalFiles] [$progressPercent%] Converting $($inputFile.Name) to $($outputFile.Name)"
-
     if ($Acceleration)
     {
-        ffmpeg -hide_banner -loglevel error -hwaccel cuda -hwaccel_output_format cuda -i "$($inputFile.FullName)" -c:v av1_nvenc -preset p3 -c:a copy "$($outputFile.FullName)"
+        Write-Host "[$Counter/$TotalFiles] [$progressPercent%] [GPU] Converting $($inputFile.Name) to $($outputFile.Name)"
+
+        ffmpeg -hide_banner -loglevel error -hwaccel cuda -hwaccel_output_format cuda -i "$($inputFile.FullName)" -c:v $VideoCodecGPU -preset $VideoCodecPresetGPU -c:a copy "$($outputFile.FullName)"
     }
     else
     {
+        Write-Host "[$Counter/$TotalFiles] [$progressPercent%] [CPU] Converting $($inputFile.Name) to $($outputFile.Name)"
+
         $env:SVT_LOG = 0
-        ffmpeg -hide_banner -loglevel error -i "$($inputFile.FullName)" -c:v libsvtav1 -preset 5 -c:a copy "$($outputFile.FullName)"
+        ffmpeg -hide_banner -loglevel error -i "$($inputFile.FullName)" -c:v $VideoCodecCPU -preset $VideoCodecPresetCPU -c:a copy "$($outputFile.FullName)"
     }
 }
 
