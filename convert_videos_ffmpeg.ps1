@@ -1,8 +1,8 @@
 # formats to take as imput
-$VideoFormatsToConvert = @("mp4")
+$Includes = @("avi", "mkv", "mod", "mov", "mp4", "mpg", "mpeg", "vob", "wmv")
 
 # output
-$Container = "mkv"
+$Format = "mkv"
 $Codec = "libsvtav1"
 $Preset = "8"
 
@@ -12,10 +12,11 @@ $OutputRoot = $InputRoot + "_" + $Codec
 
 # recursively find all media files
 $AllFiles = @()
-foreach ($ext in $VideoFormatsToConvert)
+foreach ($ext in $Includes)
 {
     $AllFiles += Get-ChildItem -Path $InputRoot -Recurse -Include ("*." + $ext) -File
 }
+
 $TotalFiles = $AllFiles.Count
 $Counter = 0
 
@@ -28,7 +29,7 @@ foreach ($inputFile in $AllFiles)
     $absInputRoot = (Resolve-Path $InputRoot).Path
     $absFile = (Resolve-Path $inputFile.FullName).Path
     $relativePath = $absFile.Substring($absInputRoot.Length).TrimStart('\')
-    $outputFile = [System.IO.FileInfo]$(Join-Path -Path $OutputRoot -ChildPath ([System.IO.Path]::ChangeExtension($relativePath, ("." + $Container))))
+    $outputFile = [System.IO.FileInfo]$(Join-Path -Path $OutputRoot -ChildPath ([System.IO.Path]::ChangeExtension($relativePath, ("." + $Format))))
 
     # make sure output path exists
     $outputDir = Split-Path -Path $outputFile.FullName -Parent
@@ -47,6 +48,7 @@ foreach ($inputFile in $AllFiles)
     Write-Host "[$Counter/$TotalFiles] [$progressPercent%] [$Codec] Converting $($inputFile.Name) to $($outputFile.Name)"
 
     $env:SVT_LOG = 1
+
     ffmpeg -hide_banner -loglevel error -i "$($inputFile.FullName)" -c:v $Codec -preset $Preset -c:a copy "$($outputFile.FullName)"
 }
 

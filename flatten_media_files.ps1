@@ -5,7 +5,7 @@ $flatDir = $rootDir + "_flattened"
 $extensions = 
 @(
     # image formats
-    "bmp", "jpeg", "jpg", "png", "orf", "tif", "tiff",
+    "bmp", "jpeg", "jpg", "png", "orf", "tif", "tiff", "raw", "avif"
 
     # video formats
     "avi", "mkv", "mod", "mov", "mp4", "mpg", "mpeg", "vob", "wmv"
