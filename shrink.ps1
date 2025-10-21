@@ -6,7 +6,16 @@ $OutputRoot = $InputRoot + "_av1"
 $VideoFormatsToConvert = @("mp4")
 $VideoFormatToConvertTo = "mkv"
 
-$Acceleration = $true
+# wether to use gpu or cpu
+$Acceleration = $false
+if ($Acceleration)
+{
+    $OutputRoot += "_gpu"
+}
+else
+{
+    $OutputRoot += "_cpu"
+}
 
 # recursively find all media files
 $AllFiles = @()
@@ -49,12 +58,12 @@ foreach ($inputFile in $AllFiles)
 
     if ($Acceleration)
     {
-        ffmpeg -hide_banner -loglevel error -hwaccel cuda -hwaccel_output_format cuda -i "$($inputFile.FullName)" -c:v av1_nvenc -preset fast -c:a copy "$($outputFile.FullName)"
+        ffmpeg -hide_banner -loglevel error -hwaccel cuda -hwaccel_output_format cuda -i "$($inputFile.FullName)" -c:v av1_nvenc -preset p3 -c:a copy "$($outputFile.FullName)"
     }
     else
     {
         $env:SVT_LOG = 0
-        ffmpeg -hide_banner -loglevel error -i "$($inputFile.FullName)" -c:v libsvtav1 -preset 6 -c:a copy "$($outputFile.FullName)"
+        ffmpeg -hide_banner -loglevel error -i "$($inputFile.FullName)" -c:v libsvtav1 -preset 5 -c:a copy "$($outputFile.FullName)"
     }
 }
 
