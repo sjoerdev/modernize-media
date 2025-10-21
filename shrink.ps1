@@ -6,6 +6,8 @@ $OutputRoot = $InputRoot + "_av1"
 $VideoFormatsToConvert = @("mp4")
 $VideoFormatToConvertTo = "mkv"
 
+$Acceleration = $true
+
 # recursively find all media files
 $AllFiles = @()
 
@@ -45,7 +47,15 @@ foreach ($inputFile in $AllFiles)
 
     Write-Host "[$Counter/$TotalFiles] [$progressPercent%] Converting $($inputFile.Name) to $($outputFile.Name)"
 
-    ffmpeg -hide_banner -loglevel error -hwaccel cuda -hwaccel_output_format cuda -i "$($inputFile.FullName)" -c:v av1_nvenc -preset fast -c:a copy "$($outputFile.FullName)"
+    if ($Acceleration)
+    {
+        ffmpeg -hide_banner -loglevel error -hwaccel cuda -hwaccel_output_format cuda -i "$($inputFile.FullName)" -c:v av1_nvenc -preset fast -c:a copy "$($outputFile.FullName)"
+    }
+    else
+    {
+        $env:SVT_LOG = 0
+        ffmpeg -hide_banner -loglevel error -i "$($inputFile.FullName)" -c:v libsvtav1 -preset 6 -c:a copy "$($outputFile.FullName)"
+    }
 }
 
 Write-Host "Finished converting media"
