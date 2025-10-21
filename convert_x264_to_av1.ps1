@@ -1,36 +1,21 @@
+# formats to take as imput
+$VideoFormatsToConvert = @("mp4")
+
+# output
+$Container = "mkv"
+$Codec = "libsvtav1"
+$Preset = "8"
+
 # input and output directories
 $InputRoot = "./" + $args[0]
-$OutputRoot = $InputRoot
-
-# video formats
-$VideoFormatsToConvert = @("mp4")
-$VideoFormatToConvertTo = "mkv"
-
-# codecs and quality
-$VideoCodecGPU = "av1_nvenc"
-$VideoCodecPresetGPU = "p3"
-$VideoCodecCPU = "libsvtav1"
-$VideoCodecPresetCPU = "5"
-
-# wether to use gpu or cpu
-$Acceleration = $false
-if ($Acceleration)
-{
-    $OutputRoot += "_" + $VideoCodecGPU
-}
-else
-{
-    $OutputRoot += "_" + $VideoCodecCPU
-}
+$OutputRoot = $InputRoot + "_" + $Codec
 
 # recursively find all media files
 $AllFiles = @()
-
 foreach ($ext in $VideoFormatsToConvert)
 {
     $AllFiles += Get-ChildItem -Path $InputRoot -Recurse -Include ("*." + $ext) -File
 }
-
 $TotalFiles = $AllFiles.Count
 $Counter = 0
 
@@ -43,7 +28,7 @@ foreach ($inputFile in $AllFiles)
     $absInputRoot = (Resolve-Path $InputRoot).Path
     $absFile = (Resolve-Path $inputFile.FullName).Path
     $relativePath = $absFile.Substring($absInputRoot.Length).TrimStart('\')
-    $outputFile = [System.IO.FileInfo]$(Join-Path -Path $OutputRoot -ChildPath ([System.IO.Path]::ChangeExtension($relativePath, ("." + $VideoFormatToConvertTo))))
+    $outputFile = [System.IO.FileInfo]$(Join-Path -Path $OutputRoot -ChildPath ([System.IO.Path]::ChangeExtension($relativePath, ("." + $Container))))
 
     # make sure output path exists
     $outputDir = Split-Path -Path $outputFile.FullName -Parent
@@ -59,19 +44,10 @@ foreach ($inputFile in $AllFiles)
         continue
     }
 
-    if ($Acceleration)
-    {
-        Write-Host "[$Counter/$TotalFiles] [$progressPercent%] [GPU] Converting $($inputFile.Name) to $($outputFile.Name)"
+    Write-Host "[$Counter/$TotalFiles] [$progressPercent%] [$Codec] Converting $($inputFile.Name) to $($outputFile.Name)"
 
-        ffmpeg -hide_banner -loglevel error -hwaccel cuda -hwaccel_output_format cuda -i "$($inputFile.FullName)" -c:v $VideoCodecGPU -preset $VideoCodecPresetGPU -c:a copy "$($outputFile.FullName)"
-    }
-    else
-    {
-        Write-Host "[$Counter/$TotalFiles] [$progressPercent%] [CPU] Converting $($inputFile.Name) to $($outputFile.Name)"
-
-        $env:SVT_LOG = 0
-        ffmpeg -hide_banner -loglevel error -i "$($inputFile.FullName)" -c:v $VideoCodecCPU -preset $VideoCodecPresetCPU -c:a copy "$($outputFile.FullName)"
-    }
+    $env:SVT_LOG = 1
+    ffmpeg -hide_banner -loglevel error -i "$($inputFile.FullName)" -c:v $Codec -preset $Preset -c:a copy "$($outputFile.FullName)"
 }
 
 Write-Host "Finished converting media"
