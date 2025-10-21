@@ -81,24 +81,24 @@ foreach ($inputFile in $AllFiles)
         
         if ($isImage)
         {
-            magick $inputFile.FullName $outputFile.FullName
+            magick "$($inputFile.FullName)" "$($outputFile.FullName)"
         }
         else
         {
             if ($VideoFormatsToConvertWithGPU -contains $inputFile.Extension.ToLower().TrimStart('.'))
             {
-                ffmpeg -hide_banner -loglevel error -hwaccel cuda -i $inputFile.FullName -c:v h264_nvenc -preset fast -c:a aac $outputFile.FullName
+                ffmpeg -hide_banner -loglevel error -hwaccel cuda -i "$($inputFile.FullName)" -c:v h264_nvenc -preset fast -c:a aac "$($outputFile.FullName)"
             }
             else
             {
-                ffmpeg -hide_banner -loglevel error -i $inputFile.FullName -c:v libx264 -preset fast -c:a aac $outputFile.FullName
+                ffmpeg -hide_banner -loglevel error -i "$($inputFile.FullName)" -c:v libx264 -preset fast -c:a aac "$($outputFile.FullName)"
             }
         }
     }
     else
     {
         Write-Host "[$Counter/$TotalFiles] [$progressPercent%] Copying $($inputFile.Name)"
-        Copy-Item $inputFile.FullName $outputFile.FullName
+        Copy-Item "$($inputFile.FullName)" "$($outputFile.FullName)"
     }
 }
 
