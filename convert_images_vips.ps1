@@ -1,15 +1,13 @@
 # formats to take as imput
-$Includes = @("avi", "mkv", "mod", "mov", "mp4", "mpg", "mpeg", "vob", "wmv")
+$Includes = @("bmp", "jpeg", "jpg", "png", "orf", "tif", "tiff", "raw", "avif")
 
 # output
-$Format = "mkv"
-$Codec = "libsvtav1"
-$Preset = "8"
-$Quality = 20
+$Format = "avif"
+$Quality = 80
 
 # input and output directories
 $InputRoot = "./" + $args[0]
-$OutputRoot = $InputRoot + "_" + $Codec + "_" + $Format
+$OutputRoot = $InputRoot + "_" + "vips" + "_" + $Format
 
 # recursively find all media files
 $AllFiles = @()
@@ -46,11 +44,9 @@ foreach ($inputFile in $AllFiles)
         continue
     }
 
-    Write-Host "[$Counter/$TotalFiles] [$progressPercent%] [$Codec] Converting $($inputFile.Name) to $($outputFile.Name)"
+    Write-Host "[$Counter/$TotalFiles] [$progressPercent%] [vips] Converting $($inputFile.Name) to $($outputFile.Name)"
 
-    $env:SVT_LOG = 1
-
-    ffmpeg -hide_banner -loglevel error -i "$($inputFile.FullName)" -c:v $Codec -preset $Preset -crf $Quality -c:a aac "$($outputFile.FullName)"
+    vips copy "$($inputFile.FullName)" "$($outputFile.FullName)[Q=$Quality]"
 }
 
 Write-Host "Finished converting media"

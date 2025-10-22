@@ -9,7 +9,7 @@ $Quality = 20
 
 # input and output directories
 $InputRoot = "./" + $args[0]
-$OutputRoot = $InputRoot + "_" + $Codec
+$OutputRoot = $InputRoot + "_" + $Codec + "_" + $Format
 
 # recursively find all media files
 $AllFiles = @()
