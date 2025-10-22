@@ -2,9 +2,9 @@
 $Includes = @("avi", "mkv", "mod", "mov", "mp4", "mpg", "mpeg", "vob", "wmv")
 
 # output
-$Format = "mkv"
-$Codec = "libsvtav1"
-$Preset = "8"
+$Format = "mp4"
+$Codec = "libx265"
+$Preset = "fast"
 $Quality = 20
 
 # input and output directories
@@ -50,7 +50,7 @@ foreach ($inputFile in $AllFiles)
 
     $env:SVT_LOG = 1
 
-    ffmpeg -hide_banner -loglevel error -i "$($inputFile.FullName)" -c:v $Codec -preset $Preset -crf $Quality -c:a aac "$($outputFile.FullName)"
+    ffmpeg -hide_banner -loglevel error -i "$($inputFile.FullName)" -c:v $Codec -x265-params log-level=error -preset $Preset -crf $Quality -c:a aac "$($outputFile.FullName)"
 }
 
 Write-Host "Finished converting media"
