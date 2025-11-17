@@ -2,7 +2,7 @@
 $Includes = @("bmp", "jpeg", "jpg", "png", "orf", "tif", "tiff", "raw", "avif")
 
 # output
-$Format = "jpeg"
+$Format = "avif"
 
 # input and output directories
 $InputRoot = "./" + $args[0]
