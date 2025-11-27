@@ -8,10 +8,17 @@ $Format = "mp4"
 $Codec = "libx265"
 $Preset = "fast"
 $Quality = 20
+$Method = $Codec
+
+function Run-Command($inputFilePath, $outputFilePath)
+{
+    $env:SVT_LOG = 1
+    ffmpeg -hide_banner -loglevel error -i $inputFilePath -c:v $Codec -x265-params log-level=error -preset $Preset -crf $Quality -c:a aac $outputFilePath
+}
 
 # input and output directories
 $InputRoot = "./" + $args[0]
-$OutputRoot = $InputRoot + "_" + $Codec + "_" + $Format
+$OutputRoot = $InputRoot + "_" + $Format + "_" + $Method
 
 # recursively find all media files
 $AllFiles = Get-ChildItem -Path $InputRoot -Recurse -File | Where-Object { $Includes -contains $_.Extension.TrimStart(".").ToLower() }
@@ -44,11 +51,9 @@ foreach ($inputFile in $AllFiles)
         continue
     }
 
-    Write-Host "[$Counter/$TotalFiles] [$progressPercent%] [$Codec] Converting $($inputFile.Name) to $($outputFile.Name)"
+    Write-Host "[$Counter/$TotalFiles] [$progressPercent%] [$Method] Converting $($inputFile.Name) to $($outputFile.Name)"
 
-    $env:SVT_LOG = 1
-
-    ffmpeg -hide_banner -loglevel error -i "$($inputFile.FullName)" -c:v $Codec -x265-params log-level=error -preset $Preset -crf $Quality -c:a aac "$($outputFile.FullName)"
+    Run-Command("$($inputFile.FullName)", "$($outputFile.FullName)")
 }
 
 Write-Host "Finished converting media"

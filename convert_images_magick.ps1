@@ -5,10 +5,16 @@ $Includes = Get-Content $FormatsFilePath
 
 # output
 $Format = "avif"
+$Method = "magick"
+
+function Run-Command($inputFilePath, $outputFilePath)
+{
+    magick $inputFilePath $outputFilePath
+}
 
 # input and output directories
 $InputRoot = "./" + $args[0]
-$OutputRoot = $InputRoot + "_" + "magick" + "_" + $Format
+$OutputRoot = $InputRoot + "_" + $Format + "_" + $Method
 
 # recursively find all media files
 $AllFiles = Get-ChildItem -Path $InputRoot -Recurse -File | Where-Object { $Includes -contains $_.Extension.TrimStart(".").ToLower() }
@@ -41,9 +47,9 @@ foreach ($inputFile in $AllFiles)
         continue
     }
 
-    Write-Host "[$Counter/$TotalFiles] [$progressPercent%] [magick] Converting $($inputFile.Name) to $($outputFile.Name)"
+    Write-Host "[$Counter/$TotalFiles] [$progressPercent%] [$Method] Converting $($inputFile.Name) to $($outputFile.Name)"
 
-    magick "$($inputFile.FullName)" "$($outputFile.FullName)"
+    Run-Command("$($inputFile.FullName)", "$($outputFile.FullName)")
 }
 
 Write-Host "Finished converting media"
