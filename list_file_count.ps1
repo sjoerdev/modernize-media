@@ -6,11 +6,6 @@ $VideoFormatsFilePath = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Pa
 $ImageFormatsFilePath = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) $ImageFormatsFile;
 $Includes = (Get-Content $ImageFormatsFilePath) + (Get-Content $VideoFormatsFilePath)
 
-foreach ($format in $Includes)
-{
-    Write-Host $format
-}
-
 $mediaFiles = Get-ChildItem -Path $rootDir -Recurse -File | Where-Object { $Includes -contains $_.Extension.TrimStart(".").ToLower() }
 
 $groupedResults = $mediaFiles | Group-Object -Property { $_.Extension.TrimStart(".").ToLower() } | Sort-Object Count -Descending
