@@ -13,7 +13,8 @@ function Run-Command($inputFilePath, $outputFilePath)
 }
 
 # input and output directories
-$InputRoot = "./" + $args[0]
+$InputNameNormalized = $args[0].TrimEnd('\','/').Replace('./','').Replace('.\','')
+$InputRoot = "./" + $InputNameNormalized
 $OutputRoot = $InputRoot + "_" + $Format + "_" + $Method
 
 # recursively find all media files
