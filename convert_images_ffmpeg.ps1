@@ -2,9 +2,8 @@
 $InputFormats = "formats_images.txt";
 $OutputFormat = "avif"
 $Identifier = "libsvtav1"
-
-function Run-Command($inputFilePath, $outputFilePath)
-{
+$Command = {
+    param($inputFilePath, $outputFilePath)
     $env:SVT_LOG = 1
     ffmpeg -hide_banner -loglevel error -i $inputFilePath -c:v libsvtav1 -preset 8 -crf 20 $outputFilePath
 }
@@ -51,7 +50,7 @@ foreach ($inputFile in $AllFiles)
 
     Write-Host "[$Counter/$TotalFiles] [$progressPercent%] [$Identifier] Converting $($inputFile.Name) to $($outputFile.Name)"
 
-    Run-Command "$($inputFile.FullName)" "$($outputFile.FullName)"
+    & $Command "$($inputFile.FullName)" "$($outputFile.FullName)"
 }
 
 Write-Host "Finished converting media"

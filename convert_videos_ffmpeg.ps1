@@ -2,9 +2,8 @@
 $InputFormats = "formats_videos.txt";
 $OutputFormat = "mkv"
 $Identifier = "nvenc"
-
-function Run-Command($inputFilePath, $outputFilePath)
-{
+$Command = {
+    param($inputFilePath, $outputFilePath)
     ffmpeg -hide_banner -loglevel error -i $inputFilePath -preset fast -c:v hevc_nvenc -cq 20 -c:a aac -b:a 320k $outputFilePath
 }
 
@@ -50,7 +49,7 @@ foreach ($inputFile in $AllFiles)
 
     Write-Host "[$Counter/$TotalFiles] [$progressPercent%] [$Identifier] Converting $($inputFile.Name) to $($outputFile.Name)"
 
-    Run-Command "$($inputFile.FullName)" "$($outputFile.FullName)"
+    & $Command "$($inputFile.FullName)" "$($outputFile.FullName)"
 }
 
 Write-Host "Finished converting media"

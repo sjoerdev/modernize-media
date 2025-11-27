@@ -2,9 +2,8 @@
 $InputFormats = "formats_images.txt";
 $OutputFormat = "avif"
 $Identifier = "magick"
-
-function Run-Command($inputFilePath, $outputFilePath)
-{
+$Command = {
+    param($inputFilePath, $outputFilePath)
     magick $inputFilePath $outputFilePath
 }
 
@@ -50,7 +49,7 @@ foreach ($inputFile in $AllFiles)
 
     Write-Host "[$Counter/$TotalFiles] [$progressPercent%] [$Identifier] Converting $($inputFile.Name) to $($outputFile.Name)"
 
-    Run-Command "$($inputFile.FullName)" "$($outputFile.FullName)"
+    & $Command "$($inputFile.FullName)" "$($outputFile.FullName)"
 }
 
 Write-Host "Finished converting media"
