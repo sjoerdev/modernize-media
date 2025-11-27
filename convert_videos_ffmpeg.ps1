@@ -1,7 +1,7 @@
 # output
-$Format = "mkv"
-$Method = "nvenc"
-$FormatsFile = "formats_videos.txt";
+$InputFormats = "formats_videos.txt";
+$OutputFormat = "mkv"
+$Identifier = "nvenc"
 
 function Run-Command($inputFilePath, $outputFilePath)
 {
@@ -11,10 +11,10 @@ function Run-Command($inputFilePath, $outputFilePath)
 # input and output directories
 $InputNameNormalized = $args[0].TrimEnd('\','/').Replace('./','').Replace('.\','')
 $InputRoot = "./" + $InputNameNormalized
-$OutputRoot = $InputRoot + "_" + $Format + "_" + $Method
+$OutputRoot = $InputRoot + "_" + $OutputFormat + "_" + $Identifier
 
 # formats to take as input
-$FormatsFilePath = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) $FormatsFile;
+$FormatsFilePath = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) $InputFormats;
 $Includes = Get-Content $FormatsFilePath
 
 # recursively find all media files
@@ -32,7 +32,7 @@ foreach ($inputFile in $AllFiles)
     $absInputRoot = (Resolve-Path $InputRoot).Path
     $absFile = (Resolve-Path $inputFile.FullName).Path
     $relativePath = $absFile.Substring($absInputRoot.Length).TrimStart('\')
-    $outputFile = [System.IO.FileInfo]$(Join-Path -Path $OutputRoot -ChildPath ([System.IO.Path]::ChangeExtension($relativePath, ("." + $Format))))
+    $outputFile = [System.IO.FileInfo]$(Join-Path -Path $OutputRoot -ChildPath ([System.IO.Path]::ChangeExtension($relativePath, ("." + $OutputFormat))))
 
     # make sure output path exists
     $outputDir = Split-Path -Path $outputFile.FullName -Parent
@@ -48,7 +48,7 @@ foreach ($inputFile in $AllFiles)
         continue
     }
 
-    Write-Host "[$Counter/$TotalFiles] [$progressPercent%] [$Method] Converting $($inputFile.Name) to $($outputFile.Name)"
+    Write-Host "[$Counter/$TotalFiles] [$progressPercent%] [$Identifier] Converting $($inputFile.Name) to $($outputFile.Name)"
 
     Run-Command "$($inputFile.FullName)" "$($outputFile.FullName)"
 }
