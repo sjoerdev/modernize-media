@@ -1,5 +1,7 @@
 # formats to take as imput
-$Includes = @("avi", "mkv", "mod", "mov", "mp4", "mpg", "mpeg", "vob", "wmv")
+$FormatsFile = "formats_videos.txt";
+$FormatsFilePath = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) $FormatsFile;
+$Includes = Get-Content $FormatsFilePath
 
 # output
 $Format = "mp4"

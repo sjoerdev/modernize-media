@@ -1,5 +1,7 @@
 # formats to take as imput
-$Includes = @("bmp", "jpeg", "jpg", "png", "orf", "tif", "tiff", "raw", "avif", "heic", "heif")
+$FormatsFile = "formats_images.txt";
+$FormatsFilePath = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) $FormatsFile;
+$Includes = Get-Content $FormatsFilePath
 
 # output
 $Format = "avif"
