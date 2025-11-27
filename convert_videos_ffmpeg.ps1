@@ -4,16 +4,12 @@ $FormatsFilePath = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) $
 $Includes = Get-Content $FormatsFilePath
 
 # output
-$Format = "mp4"
-$Codec = "libx265"
-$Preset = "fast"
-$Quality = 20
-$Method = $Codec
+$Format = "mkv"
+$Method = "nvenc"
 
 function Run-Command($inputFilePath, $outputFilePath)
 {
-    $env:SVT_LOG = 1
-    ffmpeg -hide_banner -loglevel error -i $inputFilePath -c:v $Codec -x265-params log-level=error -preset $Preset -crf $Quality -c:a aac $outputFilePath
+    ffmpeg -hide_banner -loglevel error -i $inputFilePath -preset fast -c:v hevc_nvenc -cq 20 -c:a aac $outputFilePath
 }
 
 # input and output directories
@@ -54,7 +50,7 @@ foreach ($inputFile in $AllFiles)
 
     Write-Host "[$Counter/$TotalFiles] [$progressPercent%] [$Method] Converting $($inputFile.Name) to $($outputFile.Name)"
 
-    Run-Command("$($inputFile.FullName)", "$($outputFile.FullName)")
+    Run-Command "$($inputFile.FullName)" "$($outputFile.FullName)"
 }
 
 Write-Host "Finished converting media"

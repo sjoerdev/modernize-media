@@ -5,15 +5,12 @@ $Includes = Get-Content $FormatsFilePath
 
 # output
 $Format = "avif"
-$Codec = "libsvtav1"
-$Preset = "8"
-$Quality = 20
-$Method = $Codec
+$Method = "libsvtav1"
 
 function Run-Command($inputFilePath, $outputFilePath)
 {
     $env:SVT_LOG = 1
-    ffmpeg -hide_banner -loglevel error -i $inputFilePath -c:v $Codec -preset $Preset -crf $Quality $outputFilePath
+    ffmpeg -hide_banner -loglevel error -i $inputFilePath -c:v libsvtav1 -preset 8 -crf 20 $outputFilePath
 }
 
 # input and output directories
@@ -54,7 +51,7 @@ foreach ($inputFile in $AllFiles)
 
     Write-Host "[$Counter/$TotalFiles] [$progressPercent%] [$Method] Converting $($inputFile.Name) to $($outputFile.Name)"
 
-    Run-Command("$($inputFile.FullName)", "$($outputFile.FullName)")
+    Run-Command "$($inputFile.FullName)" "$($outputFile.FullName)"
 }
 
 Write-Host "Finished converting media"

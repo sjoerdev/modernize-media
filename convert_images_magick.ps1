@@ -50,7 +50,7 @@ foreach ($inputFile in $AllFiles)
 
     Write-Host "[$Counter/$TotalFiles] [$progressPercent%] [$Method] Converting $($inputFile.Name) to $($outputFile.Name)"
 
-    Run-Command("$($inputFile.FullName)", "$($outputFile.FullName)")
+    Run-Command "$($inputFile.FullName)" "$($outputFile.FullName)"
 }
 
 Write-Host "Finished converting media"
