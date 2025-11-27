@@ -3,7 +3,7 @@ $rootDir = "./" + $args[0]
 $extensions = 
 @(
     # image formats
-    "bmp", "jpeg", "jpg", "png", "orf", "tif", "tiff", "raw", "avif"
+    "bmp", "jpeg", "jpg", "png", "orf", "tif", "tiff", "raw", "avif", "heic", "heif"
 
     # video formats
     "avi", "mkv", "mod", "mov", "mp4", "mpg", "mpeg", "vob", "wmv"

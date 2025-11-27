@@ -1,5 +1,5 @@
 # formats to take as imput
-$Includes = @("bmp", "jpeg", "jpg", "png", "orf", "tif", "tiff", "raw", "avif")
+$Includes = @("bmp", "jpeg", "jpg", "png", "orf", "tif", "tiff", "raw", "avif", "heic", "heif")
 
 # output
 $Format = "avif"
