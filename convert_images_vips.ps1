@@ -10,11 +10,7 @@ $InputRoot = "./" + $args[0]
 $OutputRoot = $InputRoot + "_" + "vips" + "_" + $Format
 
 # recursively find all media files
-$AllFiles = @()
-foreach ($ext in $Includes)
-{
-    $AllFiles += Get-ChildItem -Path $InputRoot -Recurse -Include ("*." + $ext) -File
-}
+$AllFiles = Get-ChildItem -Path $InputRoot -Recurse -File | Where-Object { $Includes -contains $_.Extension.TrimStart(".").ToLower() }
 
 $TotalFiles = $AllFiles.Count
 $Counter = 0
