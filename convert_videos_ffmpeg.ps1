@@ -9,7 +9,7 @@ $Method = "nvenc"
 
 function Run-Command($inputFilePath, $outputFilePath)
 {
-    ffmpeg -hide_banner -loglevel error -i $inputFilePath -preset fast -c:v hevc_nvenc -cq 20 -c:a aac $outputFilePath
+    ffmpeg -hide_banner -loglevel error -i $inputFilePath -preset fast -c:v hevc_nvenc -cq 20 -c:a aac -b:a 320k $outputFilePath
 }
 
 # input and output directories
