@@ -1,11 +1,7 @@
-# formats to take as imput
-$FormatsFile = "formats_images.txt";
-$FormatsFilePath = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) $FormatsFile;
-$Includes = Get-Content $FormatsFilePath
-
 # output
 $Format = "avif"
 $Method = "libsvtav1"
+$FormatsFile = "formats_images.txt";
 
 function Run-Command($inputFilePath, $outputFilePath)
 {
@@ -17,6 +13,10 @@ function Run-Command($inputFilePath, $outputFilePath)
 $InputNameNormalized = $args[0].TrimEnd('\','/').Replace('./','').Replace('.\','')
 $InputRoot = "./" + $InputNameNormalized
 $OutputRoot = $InputRoot + "_" + $Format + "_" + $Method
+
+# formats to take as input
+$FormatsFilePath = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) $FormatsFile;
+$Includes = Get-Content $FormatsFilePath
 
 # recursively find all media files
 $AllFiles = Get-ChildItem -Path $InputRoot -Recurse -File | Where-Object { $Includes -contains $_.Extension.TrimStart(".").ToLower() }
