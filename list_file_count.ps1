@@ -1,15 +1,17 @@
 $rootDir = "./" + $args[0]
 
-$extensions = 
-@(
-    # image formats
-    "bmp", "jpeg", "jpg", "png", "orf", "tif", "tiff", "raw", "avif", "heic", "heif"
+$VideoFormatsFile = "formats_videos.txt";
+$ImageFormatsFile = "formats_images.txt";
+$VideoFormatsFilePath = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) $VideoFormatsFile;
+$ImageFormatsFilePath = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) $ImageFormatsFile;
+$Includes = (Get-Content $ImageFormatsFilePath) + (Get-Content $VideoFormatsFilePath)
 
-    # video formats
-    "avi", "mkv", "mod", "mov", "mp4", "mpg", "mpeg", "vob", "wmv"
-)
+foreach ($format in $Includes)
+{
+    Write-Host $format
+}
 
-$mediaFiles = Get-ChildItem -Path $rootDir -Recurse -File | Where-Object { $extensions -contains $_.Extension.TrimStart(".").ToLower() }
+$mediaFiles = Get-ChildItem -Path $rootDir -Recurse -File | Where-Object { $Includes -contains $_.Extension.TrimStart(".").ToLower() }
 
 $groupedResults = $mediaFiles | Group-Object -Property { $_.Extension.TrimStart(".").ToLower() } | Sort-Object Count -Descending
 
