@@ -1,4 +1,5 @@
-$rootDir = "./" + $args[0]
+$InputNameNormalized = $args[0].TrimEnd('\','/').Replace('./','').Replace('.\','')
+$rootDir = "./" + $InputNameNormalized
 $flatDir = $rootDir + "_flattened"
 
 # only copy over files of these formats to the flat directory

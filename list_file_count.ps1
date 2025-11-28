@@ -1,4 +1,5 @@
-$rootDir = "./" + $args[0]
+$InputNameNormalized = $args[0].TrimEnd('\','/').Replace('./','').Replace('.\','')
+$rootDir = "./" + $InputNameNormalized
 
 $VideoFormatsFile = "formats_videos.txt";
 $ImageFormatsFile = "formats_images.txt";
