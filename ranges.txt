@@ -1,0 +1,12 @@
+
+ffmpeg encoder usage table
+
+encoder     | range of -preset     | default -preset | CRF/CQ range | default CRF/CQ | CRF/CQ flag
+----------- | -------------------- | --------------- | ------------ | -------------- | ---------------
+libx264     | ultrafast - placebo  | medium          | 0-51         | 23             | -crf
+libx265     | ultrafast - placebo  | medium          | 0-51         | 28             | -crf
+libaom-av1  | 0 - 8                | 5               | 0-63         | 30             | -crf
+libsvtav1   | 0 - 13               | 6               | 0-63         | 35             | -crf
+hevc_nvenc  | p1 - p7              | p4              | 1-51         | 28             | -cq
+av1_nvenc   | p1 - p7              | p4              | 1-51         | 32             | -cq
+
