@@ -2,14 +2,11 @@ $rootDir = "./" + $args[0]
 $flatDir = $rootDir + "_flattened"
 
 # only copy over files of these formats to the flat directory
-$extensions = 
-@(
-    # image formats
-    "bmp", "jpeg", "jpg", "png", "orf", "tif", "tiff", "raw", "avif", "heic", "heif"
-
-    # video formats
-    "avi", "mkv", "mod", "mov", "mp4", "mpg", "mpeg", "vob", "wmv"
-)
+$VideoFormatsFile = "formats_videos.txt";
+$ImageFormatsFile = "formats_images.txt";
+$VideoFormatsFilePath = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) $VideoFormatsFile;
+$ImageFormatsFilePath = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) $ImageFormatsFile;
+$Includes = (Get-Content $ImageFormatsFilePath) + (Get-Content $VideoFormatsFilePath)
 
 if (-not (Test-Path $flatDir))
 {
@@ -18,7 +15,7 @@ if (-not (Test-Path $flatDir))
 
 Write-Host "Flattening folder: $rootDir"
 
-$files = Get-ChildItem -Path $rootDir -Recurse -File | Where-Object { $extensions -contains $_.Extension.TrimStart(".").ToLower() }
+$files = Get-ChildItem -Path $rootDir -Recurse -File | Where-Object { $Includes -contains $_.Extension.TrimStart(".").ToLower() }
 $filesTotal = $files.Count
 $fileIndex = 0
 
