@@ -1,9 +1,9 @@
 $InputNameNormalized = $args[0].TrimEnd('\','/').Replace('./','').Replace('.\','')
 $rootDir = "./" + $InputNameNormalized
 
-$e = ls $rootDir -Directory -Recurse | where { @(ls $_.FullName -Force).Count -eq 0 }
+$emptyDirs = ls $rootDir -Directory -Recurse | where { @(ls $_.FullName -Force).Count -eq 0 }
 
-foreach ($d in $e)
+foreach ($d in $emptyDirs)
 {
-    Write-Host "$($e.Count) empty dirs: $($e.Name -join ', ')"
+    Write-Host "$($emptyDirs.Count) empty dirs: $($emptyDirs.Name -join ', ')"
 }
