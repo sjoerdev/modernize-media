@@ -3,8 +3,8 @@ $rootDir = "./" + $InputNameNormalized
 $flatDir = $rootDir + "_flattened"
 
 # only copy over files of these formats to the flat directory
-$VideoFormatsFile = "formats_videos.txt";
-$ImageFormatsFile = "formats_images.txt";
+$VideoFormatsFile = "..\formats\formats_videos.txt";
+$ImageFormatsFile = "..\formats\formats_images.txt";
 $VideoFormatsFilePath = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) $VideoFormatsFile;
 $ImageFormatsFilePath = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) $ImageFormatsFile;
 $Includes = (Get-Content $ImageFormatsFilePath) + (Get-Content $VideoFormatsFilePath)

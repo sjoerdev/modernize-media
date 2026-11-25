@@ -1,12 +1,13 @@
 Import-Module .\convert_media.psm1 -Force
 
 $InputDirectory = $args[0]
-$InputFormats = "formats_images.txt";
+$InputFormats = "..\formats\formats_images.txt";
 $OutputFormat = "avif"
-$Identifier = "magick"
+$Identifier = "libsvtav1"
 $Command = {
     param($inputFilePath, $outputFilePath)
-    magick $inputFilePath $outputFilePath
+    $env:SVT_LOG = 1
+    ffmpeg -hide_banner -loglevel error -i $inputFilePath -c:v libsvtav1 -preset 8 -crf 26 $outputFilePath
 }
 
 Convert-Media $InputFormats $OutputFormat $Identifier $Command $InputDirectory

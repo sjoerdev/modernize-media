@@ -1,7 +1,7 @@
 Import-Module .\convert_media.psm1 -Force
 
 $InputDirectory = $args[0]
-$InputFormats = "formats_videos.txt";
+$InputFormats = "..\formats\formats_videos.txt";
 $OutputFormat = "mkv"
 $Identifier = "libsvtav1"
 $Command = {
