@@ -1,4 +1,4 @@
-Import-Module .\convert_media.psm1 -Force
+Import-Module (Join-Path $PSScriptRoot "convert_media.psm1") -Force
 
 $InputDirectory = $args[0]
 $InputFormats = "..\formats\formats_videos.txt";
