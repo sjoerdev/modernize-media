@@ -1,8 +1,9 @@
+*.tar
+*.exe
 wdmycloud*/
 opa_ruud*/
 *ternal*/
 test*/
-*.tar
 backup*/
 edwin*/
 Opa*/
