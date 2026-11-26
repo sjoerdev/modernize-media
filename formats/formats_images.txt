@@ -9,3 +9,4 @@ raw
 avif
 heic
 heif
+jxl
